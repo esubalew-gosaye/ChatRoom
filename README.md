@@ -98,7 +98,7 @@
 - All your change is reflected to our database
 
 **Response:**
-- `message` (string): Confirmation message.
+- `message` (string): The message you entered.
 
 ## List Messages
 
