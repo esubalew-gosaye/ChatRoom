@@ -1,7 +1,7 @@
 # WhatsAppApiServer
 
 ## Cloning and starting project
-1. - git clone 
+1. - git clone https://github.com/esubalew-gosaye/ChatRoom.git
 2. - cd WhatsAppApiServer
 3. - pip install -r requirements.txt
 4. - python manage.py runserver
@@ -93,7 +93,9 @@
 **Description:** Sends a message in the current chat room.
 
 **Parameters:**
-- `message` (string, required): The message to send.
+- `Note` This is implemented in frontend part select Room and user first.
+- use `connect` Button to connect with socket and type your message then `enter`
+- All your change is reflected to our database
 
 **Response:**
 - `message` (string): Confirmation message.
