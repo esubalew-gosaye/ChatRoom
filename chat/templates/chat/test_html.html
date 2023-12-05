@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Lobby</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+</head>
+<body>
+    <h1>Lets chat!</h1>
+
+    <form id="setup">
+        <label for="Room">Choose a Room:</label>
+        <select name="room" id="Room">
+            {% for room in rooms %}
+            <option value="{{ room.room_name }}">{{ room.room_name }}</option>
+            {% endfor %}
+        </select> <br>
+        <label for="user">As which user:</label>
+        <select name="user" id="user">
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Connect"> <br><br>
+    </form>
+
+    <form id="form">
+        Message: <input type="text" name="message"/>
+    </form>
+
+    <div id="messages"></div>
+
+    <script type="text/javascript">
+        var url = `ws://${window.location.host}/ws/chat/django/1`
+        let form1 = document.getElementById('setup')
+        form1.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let room = e.target.room.value
+            let user = e.target.user.value
+            
+            url = `ws://${window.location.host}/ws/chat/${room}/${user}`
+            localStorage.setItem('url', url)
+            start_socket()
+            form1.reset()
+        })
+
+        chatSocket = new WebSocket(localStorage.getItem('url'))
+        function start_socket(){
+            const chatSocket = new WebSocket(localStorage.getItem('url'))
+        }
+
+        chatSocket.onmessage = function(e){
+            let data = JSON.parse(e.data)
+            console.log('Data:', data)
+
+            if(data.type === 'chat'){
+                let messages = document.getElementById('messages')
+
+                messages.insertAdjacentHTML('beforeend', `<div>
+                                        <p>${data.message}</p>
+                                    </div>`)
+            }
+        }
+            
+
+        let form = document.getElementById('form')
+        form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let message = e.target.message.value 
+            
+            chatSocket.send(JSON.stringify({
+                'message':message
+            }))
+            form.reset()
+        })
+
+    </script>
+</body>
+</html>
